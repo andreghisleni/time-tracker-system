@@ -1,0 +1,17 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model TimeEntry {
+  id        String   @id @default(uuid())
+  startTime DateTime
+  endTime   DateTime
+  date      DateTime
+  totalHours Float
+}
+
