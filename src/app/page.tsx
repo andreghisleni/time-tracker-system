@@ -122,7 +122,7 @@ export default function HomePage() {
     return new Date(dateTime).toLocaleDateString('pt-BR')
   }
 
-  const totalHours = timeEntries.reduce((sum, entry) => sum + entry.totalHours, 0)
+  const totalHours = timeEntries.reduce((sum:number, entry) => sum + entry.totalHours, 0)
 
   // Group entries by date for better visualization
   const entriesByDate = timeEntries.reduce((acc, entry) => {
@@ -136,7 +136,7 @@ export default function HomePage() {
 
   const dailyTotals = Object.entries(entriesByDate).map(([date, entries]) => ({
     date,
-    totalHours: entries.reduce((sum, entry) => sum + entry.totalHours, 0),
+    totalHours: entries.reduce((sum:number, entry) => sum + entry.totalHours, 0),
     entries: entries.length,
   }))
 

@@ -26,7 +26,7 @@ export default function ReadOnlyPage() {
     return new Date(dateTime).toLocaleDateString('pt-BR')
   }
 
-  const totalHours = timeEntries.reduce((sum, entry) => sum + entry.totalHours, 0)
+  const totalHours = timeEntries.reduce((sum:number, entry) => sum + entry.totalHours, 0)
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">
