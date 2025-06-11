@@ -63,7 +63,7 @@ export default function HomePage() {
   const handleQuickFilter = (value: string) => {
     setQuickFilter(value)
     const today = new Date()
-    
+
     switch (value) {
       case 'today':
         const todayStr = today.toISOString().split('T')[0]
@@ -79,7 +79,7 @@ export default function HomePage() {
         break
       case 'this-week':
         const startOfWeek = new Date(today)
-        startOfWeek.setDate(today.getDate() - today.getDay()+1)
+        startOfWeek.setDate(today.getDate() - today.getDay() + 1)
         const endOfWeek = new Date(startOfWeek)
         endOfWeek.setDate(startOfWeek.getDate() + 7)
         setStartDateFilter(startOfWeek.toISOString().split('T')[0])
@@ -123,10 +123,18 @@ export default function HomePage() {
     return new Date(dateTime).toLocaleDateString('pt-BR')
   }
 
-  const totalHours = timeEntries.reduce((sum:number, entry:RouterOutput['getTimeEntries'][0]) => sum + entry.totalHours, 0)
+  const totalHours = timeEntries.reduce((sum: number, entry: RouterOutput['getTimeEntries'][0]) => sum + entry.totalHours, 0)
 
   // Group entries by date for better visualization
-  const entriesByDate = timeEntries.reduce((acc, entry:RouterOutput['getTimeEntries'][0]) => {
+  const entriesByDate = timeEntries.reduce((acc: Record<string, {
+    startTime: string;
+    endTime: string;
+    date: string;
+    id: string;
+    totalHours: number;
+    createdAt: string;
+    updatedAt: string;
+  }[]>, entry: RouterOutput['getTimeEntries'][0]) => {
     const dateKey = formatDate(new Date(entry.date))
     if (!acc[dateKey]) {
       acc[dateKey] = []
@@ -137,14 +145,14 @@ export default function HomePage() {
 
   const dailyTotals = Object.entries(entriesByDate).map(([date, entries]) => ({
     date,
-    totalHours: entries.reduce((sum:number, entry) => sum + entry.totalHours, 0),
+    totalHours: entries.reduce((sum: number, entry) => sum + entry.totalHours, 0),
     entries: entries.length,
   }))
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">
       <h1 className="text-3xl font-bold mb-8">Time Tracker</h1>
-      
+
       {/* Add Time Entry Form */}
       <Card className="mb-8">
         <CardHeader>
