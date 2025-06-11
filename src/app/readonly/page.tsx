@@ -15,7 +15,7 @@ export default function ReadOnlyPage() {
   const { data: timeEntries = [], isLoading } = trpc.getTimeEntries.useQuery({})
 
   const formatTime = (dateTime: Date) => {
-    return new Date(dateTime).toLocaleTimeString('en-US', {
+    return new Date(dateTime).toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
@@ -23,7 +23,7 @@ export default function ReadOnlyPage() {
   }
 
   const formatDate = (dateTime: Date) => {
-    return new Date(dateTime).toLocaleDateString('en-US')
+    return new Date(dateTime).toLocaleDateString('pt-BR')
   }
 
   const totalHours = timeEntries.reduce((sum, entry) => sum + entry.totalHours, 0)
@@ -70,9 +70,9 @@ export default function ReadOnlyPage() {
               <TableBody>
                 {timeEntries.map((entry) => (
                   <TableRow key={entry.id}>
-                    <TableCell>{formatDate(entry.date)}</TableCell>
-                    <TableCell>{formatTime(entry.startTime)}</TableCell>
-                    <TableCell>{formatTime(entry.endTime)}</TableCell>
+                    <TableCell>{formatDate(new Date(entry.date))}</TableCell>
+                    <TableCell>{formatTime(new Date(entry.startTime))}</TableCell>
+                    <TableCell>{formatTime(new Date(entry.endTime))}</TableCell>
                     <TableCell>{entry.totalHours.toFixed(2)}</TableCell>
                   </TableRow>
                 ))}

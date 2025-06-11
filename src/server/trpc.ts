@@ -23,7 +23,7 @@ export const appRouter = router({
   getTimeEntries: publicProcedure
     .input(filterSchema)
     .query(async ({ input }) => {
-      const where: any = {}
+      const where: any = {} // eslint-disable-line @typescript-eslint/no-explicit-any
       
       if (input.startDate || input.endDate) {
         where.date = {}
