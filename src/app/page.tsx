@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { RouterOutput } from '@/server/trpc'
 
 export default function HomePage() {
   const [startTime, setStartTime] = useState('')
@@ -31,8 +32,8 @@ export default function HomePage() {
   const [quickFilter, setQuickFilter] = useState('')
 
   const utils = trpc.useUtils()
-  
-  const { data: timeEntries = [], isLoading } = trpc.getTimeEntries.useQuery({
+
+  const { data: timeEntries = [] as RouterOutput['getTimeEntries'], isLoading } = trpc.getTimeEntries.useQuery({
     startDate: startDateFilter || undefined,
     endDate: endDateFilter || undefined,
   })

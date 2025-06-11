@@ -10,9 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { RouterOutput } from '@/server/trpc'
 
 export default function ReadOnlyPage() {
-  const { data: timeEntries = [], isLoading } = trpc.getTimeEntries.useQuery({})
+  const { data: timeEntries = [] as RouterOutput['getTimeEntries'], isLoading } = trpc.getTimeEntries.useQuery({})
 
   const formatTime = (dateTime: Date) => {
     return new Date(dateTime).toLocaleTimeString('pt-BR', {

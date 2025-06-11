@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { initTRPC } from '@trpc/server'
+import { inferRouterInputs, inferRouterOutputs, initTRPC } from '@trpc/server'
 import { prisma } from '@/lib/prisma'
 
 const t = initTRPC.create()
@@ -100,4 +100,5 @@ export const appRouter = router({
 })
 
 export type AppRouter = typeof appRouter
-
+export type RouterInputs = inferRouterInputs<AppRouter>
+export type RouterOutput = inferRouterOutputs<AppRouter>
