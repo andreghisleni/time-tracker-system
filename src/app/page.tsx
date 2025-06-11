@@ -123,10 +123,10 @@ export default function HomePage() {
     return new Date(dateTime).toLocaleDateString('pt-BR')
   }
 
-  const totalHours = timeEntries.reduce((sum:number, entry) => sum + entry.totalHours, 0)
+  const totalHours = timeEntries.reduce((sum:number, entry:RouterOutput['getTimeEntries'][0]) => sum + entry.totalHours, 0)
 
   // Group entries by date for better visualization
-  const entriesByDate = timeEntries.reduce((acc, entry) => {
+  const entriesByDate = timeEntries.reduce((acc, entry:RouterOutput['getTimeEntries'][0]) => {
     const dateKey = formatDate(new Date(entry.date))
     if (!acc[dateKey]) {
       acc[dateKey] = []
