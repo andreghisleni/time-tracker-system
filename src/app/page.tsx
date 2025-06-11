@@ -78,15 +78,15 @@ export default function HomePage() {
         break
       case 'this-week':
         const startOfWeek = new Date(today)
-        startOfWeek.setDate(today.getDate() - today.getDay())
+        startOfWeek.setDate(today.getDate() - today.getDay()+1)
         const endOfWeek = new Date(startOfWeek)
-        endOfWeek.setDate(startOfWeek.getDate() + 6)
+        endOfWeek.setDate(startOfWeek.getDate() + 7)
         setStartDateFilter(startOfWeek.toISOString().split('T')[0])
         setEndDateFilter(endOfWeek.toISOString().split('T')[0])
         break
       case 'last-week':
         const lastWeekStart = new Date(today)
-        lastWeekStart.setDate(today.getDate() - today.getDay() - 7)
+        lastWeekStart.setDate(today.getDate() - today.getDay() - 6)
         const lastWeekEnd = new Date(lastWeekStart)
         lastWeekEnd.setDate(lastWeekStart.getDate() + 6)
         setStartDateFilter(lastWeekStart.toISOString().split('T')[0])
@@ -111,7 +111,7 @@ export default function HomePage() {
   }
 
   const formatTime = (dateTime: Date) => {
-    return new Date(dateTime).toLocaleTimeString('en-US', {
+    return new Date(dateTime).toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
@@ -119,14 +119,14 @@ export default function HomePage() {
   }
 
   const formatDate = (dateTime: Date) => {
-    return new Date(dateTime).toLocaleDateString('en-US')
+    return new Date(dateTime).toLocaleDateString('pt-BR')
   }
 
   const totalHours = timeEntries.reduce((sum, entry) => sum + entry.totalHours, 0)
 
   // Group entries by date for better visualization
   const entriesByDate = timeEntries.reduce((acc, entry) => {
-    const dateKey = formatDate(entry.date)
+    const dateKey = formatDate(new Date(entry.date))
     if (!acc[dateKey]) {
       acc[dateKey] = []
     }
@@ -330,9 +330,9 @@ export default function HomePage() {
               <TableBody>
                 {timeEntries.map((entry) => (
                   <TableRow key={entry.id}>
-                    <TableCell>{formatDate(entry.date)}</TableCell>
-                    <TableCell>{formatTime(entry.startTime)}</TableCell>
-                    <TableCell>{formatTime(entry.endTime)}</TableCell>
+                    <TableCell>{formatDate(new Date(entry.date))}</TableCell>
+                    <TableCell>{formatTime(new Date(entry.startTime))}</TableCell>
+                    <TableCell>{formatTime(new Date(entry.endTime))}</TableCell>
                     <TableCell>{entry.totalHours.toFixed(2)}</TableCell>
                     <TableCell>
                       <Button
