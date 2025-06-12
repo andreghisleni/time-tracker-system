@@ -47,10 +47,10 @@ export const appRouter = router({
   createTimeEntry: publicProcedure
     .input(timeEntrySchema)
     .mutation(async ({ input }) => {
-      const startTime = new Date(`${input.date}T${input.startTime}`)
-      const endTime = new Date(`${input.date}T${input.endTime}`)
-      const date = new Date(input.date)
-      
+      const startTime = addHours(new Date(`${input.date}T${input.startTime}`), 3) // Adjust for timezone if needed
+      const endTime = addHours(new Date(`${input.date}T${input.endTime}`), 3)
+      const date = addHours(new Date(input.date), 3)
+
       // Calculate total hours
       const totalHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60)
 
