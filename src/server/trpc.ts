@@ -2,6 +2,8 @@ import { z } from 'zod'
 import { inferRouterInputs, inferRouterOutputs, initTRPC } from '@trpc/server'
 import { prisma } from '@/lib/prisma'
 
+import { addHours } from 'date-fns'
+
 const t = initTRPC.create()
 
 export const router = t.router
@@ -80,10 +82,10 @@ export const appRouter = router({
       date: z.string(),
     }))
     .mutation(async ({ input }) => {
-      const startTime = new Date(`${input.date}T${input.startTime}`)
-      const endTime = new Date(`${input.date}T${input.endTime}`)
-      const date = new Date(input.date)
-      
+      const startTime = addHours(new Date(`${input.date}T${input.startTime}`), 3)
+      const endTime = addHours(new Date(`${input.date}T${input.endTime}`), 3)
+      const date = addHours(new Date(input.date), 3)
+
       // Calculate total hours
       const totalHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60)
 
