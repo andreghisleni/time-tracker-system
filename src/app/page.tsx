@@ -22,6 +22,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { RouterOutput } from '@/server/trpc'
+import { addHours } from 'date-fns'
 
 export default function HomePage() {
   const [startTime, setStartTime] = useState('')
@@ -120,7 +121,7 @@ export default function HomePage() {
   }
 
   const formatDate = (dateTime: Date) => {
-    return new Date(dateTime).toLocaleDateString('pt-BR')
+    return addHours(new Date(dateTime), 3).toLocaleDateString('pt-BR')
   }
 
   const totalHours = timeEntries.reduce((sum: number, entry: RouterOutput['getTimeEntries'][0]) => sum + entry.totalHours, 0)
