@@ -12,6 +12,21 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import {
+  startOfDay,
+  endOfDay,
+  subDays,
+  startOfWeek,
+  endOfWeek,
+  subWeeks,
+  startOfMonth,
+  endOfMonth,
+  subMonths,
+  format
+} from 'date-fns';
+import { ptBR } from 'date-fns/locale'; // Importe o locale para português, se quiser usar para formatação ou outras operações localizadas
+
+
 type FiltersProps = {
   quickFilter: string
   startDateFilter: string
@@ -30,57 +45,55 @@ export function Filters({
   setEndDateFilter,
 }: FiltersProps) {
 
-  const handleQuickFilter = (value: string) => {
-    setQuickFilter(value)
-    const today = new Date()
+function handleQuickFilter (value: string){
+  setQuickFilter(value);
+  const today = new Date();
 
-    switch (value) {
-      case 'today':
-        const todayStr = today.toISOString().split('T')[0]
-        setStartDateFilter(todayStr)
-        setEndDateFilter(todayStr)
-        break
-      case 'yesterday':
-        const yesterday = new Date(today)
-        yesterday.setDate(yesterday.getDate() - 1)
-        const yesterdayStr = yesterday.toISOString().split('T')[0]
-        setStartDateFilter(yesterdayStr)
-        setEndDateFilter(yesterdayStr)
-        break
-      case 'this-week':
-        const startOfWeek = new Date(today)
-        startOfWeek.setDate(today.getDate() - today.getDay())
-        const endOfWeek = new Date(startOfWeek)
-        endOfWeek.setDate(startOfWeek.getDate() + 6)
-        setStartDateFilter(startOfWeek.toISOString().split('T')[0])
-        setEndDateFilter(endOfWeek.toISOString().split('T')[0])
-        break
-      case 'last-week':
-        const lastWeekStart = new Date(today)
-        lastWeekStart.setDate(today.getDate() - today.getDay() - 7)
-        const lastWeekEnd = new Date(lastWeekStart)
-        lastWeekEnd.setDate(lastWeekStart.getDate() + 7)
-        setStartDateFilter(lastWeekStart.toISOString().split('T')[0])
-        setEndDateFilter(lastWeekEnd.toISOString().split('T')[0])
-        break
-      case 'this-month':
-        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
-        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
-        setStartDateFilter(startOfMonth.toISOString().split('T')[0])
-        setEndDateFilter(endOfMonth.toISOString().split('T')[0])
-        break
-      case 'last-month':
-        const lastMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1)
-        const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0)
-        setStartDateFilter(lastMonthStart.toISOString().split('T')[0])
-        setEndDateFilter(lastMonthEnd.toISOString().split('T')[0])
-        break
-      default:
-        setStartDateFilter('')
-        setEndDateFilter('')
-    }
+  // Opções para startOfWeek e endOfWeek para que a semana comece na segunda-feira
+  const weekOptions = { weekStartsOn: 1 as 0 | 1 | 2 | 3 | 4 | 5 | 6 }; // 1 representa segunda-feira
+
+  let startDate: Date | null = null;
+  let endDate: Date | null = null;
+
+  switch (value) {
+    case 'today':
+      startDate = startOfDay(today);
+      endDate = endOfDay(today);
+      break;
+    case 'yesterday':
+      const yesterday = subDays(today, 1);
+      startDate = startOfDay(yesterday);
+      endDate = endOfDay(yesterday);
+      break;
+    case 'this-week':
+      startDate = startOfWeek(today, weekOptions);
+      endDate = endOfWeek(today, weekOptions);
+      break;
+    case 'last-week':
+      const lastWeek = subWeeks(today, 1);
+      startDate = startOfWeek(lastWeek, weekOptions);
+      endDate = endOfWeek(lastWeek, weekOptions);
+      break;
+    case 'this-month':
+      startDate = startOfMonth(today);
+      endDate = endOfMonth(today);
+      break;
+    case 'last-month':
+      const lastMonth = subMonths(today, 1);
+      startDate = startOfMonth(lastMonth);
+      endDate = endOfMonth(lastMonth);
+      break;
+    default:
+      // Se 'value' não for uma das opções, limpa os filtros
+      setStartDateFilter('');
+      setEndDateFilter('');
+      return; // Sai da função para não tentar formatar datas nulas
   }
 
+  // Formata as datas para o formato 'YYYY-MM-DD'
+  setStartDateFilter(format(startDate, 'yyyy-MM-dd'));
+  setEndDateFilter(format(endDate, 'yyyy-MM-dd'));
+};
 
   return (<Card className="mb-8">
     <CardHeader>
